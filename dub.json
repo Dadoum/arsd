@@ -63,7 +63,6 @@
 			"dflags-dmd": ["-mv=arsd.nanovega=$PACKAGE_DIR/nanovega.d"],
 			"dflags-ldc": ["--mv=arsd.nanovega=$PACKAGE_DIR/nanovega.d"],
 			"dependencies": {
-				"arsd-official:simpledisplay":"*",
 				"arsd-official:image_files":"*",
 				"arsd-official:svg":"*",
 				"arsd-official:ttf":"*",
@@ -72,11 +71,22 @@
 					"version": "*",
 					"optional": true,
 				},
-				"bindbc-opengl": {
-					"version": "*",
-					"optional": true,
-				},
 			},
+			"configurations": [
+				{
+					"name": "simpledisplay",
+					"dependencies": {
+						"arsd-official:simpledisplay":"*",
+					},
+				},
+				{
+					"name": "bindbc",
+					"versions": ["nanovg_bindbc_opengl_bindings", "GL_30"],
+					"dependencies": {
+						"bindbc-opengl":"*",
+					},
+				},
+			],
 			"libs-posix": ["freetype", "fontconfig"],
 			"sourceFiles": ["nanovega.d", "blendish.d"]
 		},
