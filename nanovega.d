@@ -12318,7 +12318,7 @@ static if (!is(typeof(GL_STENCIL_BUFFER_BIT))) enum uint GL_STENCIL_BUFFER_BIT =
 
 
 
-version(bindbc){
+version(nanovg_bindbc_opengl_bindings){
   private extern(System) nothrow @nogc:
   // this definition doesn't exist in regular OpenGL (?)
   enum uint GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS = 0x8CD9U;
