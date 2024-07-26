@@ -50,6 +50,9 @@
 +/
 module arsd.dom;
 
+static import arsd.core;
+import arsd.core : encodeUriComponent, decodeUriComponent;
+
 // FIXME: support the css standard namespace thing in the selectors too
 
 version(with_arsd_jsvar)
@@ -1407,10 +1410,18 @@ class Document : FileResource, DomParent {
 		return findFirst(&doesItMatch);
 	}
 
-	/// This returns the <body> element, if there is one. (It different than Javascript, where it is called 'body', because body is a keyword in D.)
+	/++
+		This returns the <body> element, if there is one. (It different than Javascript, where it is called 'body', because body used to be a keyword in D.)
+
+		History:
+			`body` alias added February 26, 2024
+	+/
 	Element mainBody() {
 		return getFirstElementByTagName("body");
 	}
+
+	/// ditto
+	alias body = mainBody;
 
 	/// this uses a weird thing... it's [name=] if no colon and
 	/// [property=] if colon
@@ -4567,7 +4578,6 @@ string camelCase(string a) {
 
 import std.string;
 import std.exception;
-import std.uri;
 import std.array;
 import std.range;
 
@@ -5392,7 +5402,7 @@ class Link : Element {
 			if(index == -1)
 				hash[var] = "";
 			else {
-				hash[decodeComponent(var[0..index])] = decodeComponent(var[index + 1 .. $]);
+				hash[decodeUriComponent(var[0..index])] = decodeUriComponent(var[index + 1 .. $]);
 			}
 		}
 
@@ -5422,9 +5432,9 @@ class Link : Element {
 			else
 				first = false;
 
-			query ~= encodeComponent(name);
+			query ~= encodeUriComponent(name);
 			if(value.length)
-				query ~= "=" ~ encodeComponent(value);
+				query ~= "=" ~ encodeUriComponent(value);
 		}
 
 		if(query != "?")
@@ -5664,7 +5674,7 @@ class Form : Element {
 			else
 				outputted = true;
 
-			ret ~= std.uri.encodeComponent(e.name) ~ "=" ~ std.uri.encodeComponent(getValue(e.name));
+			ret ~= encodeUriComponent(e.name) ~ "=" ~ encodeUriComponent(getValue(e.name));
 
 			namesDone[e.name] = true;
 		}
